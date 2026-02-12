@@ -1,0 +1,111 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qwen-agent-swarm"
+version = "0.1.0"
+description = "Multi-agent orchestration framework powered by Qwen LLMs"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+keywords = ["qwen", "agent", "swarm", "llm", "ai", "multi-agent", "orchestration"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/qwen-agent-swarm"
+Repository = "https://github.com/your-org/qwen-agent-swarm"
+Issues = "https://github.com/your-org/qwen-agent-swarm/issues"
+
+dependencies = [
+    "aiohttp>=3.9.0",
+    "pydantic>=2.0.0",
+    "dashscope>=1.14.0",  # Qwen API client
+    "openai>=1.0.0",  # For local model compatibility
+    "tiktoken>=0.5.0",  # Token counting
+    "duckduckgo-search>=6.0.0",  # DuckDuckGo search backend
+    "RestrictedPython>=7.0",  # Secure Python code execution sandbox
+    "httpx[http2]>=0.27.0",  # HTTP client with HTTP/2 support for better compatibility
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.23.0",
+    "hypothesis>=6.0.0",
+    "pytest-cov>=4.0.0",
+    "mypy>=1.0.0",
+    "ruff>=0.1.0",
+]
+web = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "websockets>=12.0",
+    "python-multipart>=0.0.6",
+    "python-dotenv>=1.0.0",
+]
+all = [
+    "qwen-agent-swarm[dev,web]",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = [
+    "-v",
+    "--tb=short",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::hypothesis.errors.NonInteractiveExampleWarning",
+]
+
+[tool.hypothesis]
+# Hypothesis settings for property-based testing
+# Each property test should run at least 100 iterations
+max_examples = 100
+deadline = 60000  # 60 seconds deadline per test
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "D", "UP"]
+ignore = ["D100", "D104"]
+
+[tool.coverage.run]
+source = ["src"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise NotImplementedError",
+    "if TYPE_CHECKING:",
+]
